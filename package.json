@@ -1,0 +1,16 @@
+{
+  "name": "rs-home-product-billing",
+  "version": "1.0.0",
+  "description": "R.S. Home Product Billing and Customer Management Studio",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build-exe": "electron-packager . \"RS HOME PRODUCT\" --platform=win32 --arch=x64 --out=dist --overwrite"
+  },
+  "author": "R.S. Home Product",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^44.4.3",
+    "electron-packager": "^17.1.2"
+  }
+}

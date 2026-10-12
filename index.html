@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>R.S. HOME PRODUCT - Billing Studio</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div id="appToast">Notification</div>
+
+  <div id="appModalOverlay">
+    <div class="app-modal-box">
+      <h3 id="modalTitle" style="color:white; font-size:18px; margin-bottom:12px;">Confirm Action</h3>
+      <div id="modalBody" style="margin-bottom:20px; font-size:13px; color:#cbd5e1; line-height:1.5;"></div>
+      <div style="display:flex; gap:10px; justify-content:center;">
+        <button id="modalBtnConfirm" style="background:#0284c7; color:white; border:none; padding:10px 20px; border-radius:8px; font-weight:700; cursor:pointer;">Confirm</button>
+        <button onclick="closeAppModal()" style="background:#334155; color:#cbd5e1; border:none; padding:10px 20px; border-radius:8px; font-weight:700; cursor:pointer;">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EDIT ITEM DETAILS MODAL -->
+  <div id="editItemModalOverlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 999999; display: none; align-items: center; justify-content: center;">
+    <div class="app-modal-box" style="text-align: left; max-width: 420px; background: #1e293b; border: 1px solid rgba(99,102,241,0.4); border-radius: 20px; padding: 24px;">
+      <h3 style="color:white; font-size:16px; margin-bottom:16px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px;">✏️ Edit Item Details</h3>
+      
+      <div style="margin-bottom: 12px;">
+        <span style="font-size: 10px; color: var(--text-dim);">Work Date / Bill Date:</span>
+        <input type="text" id="editItemDate" class="input-box" style="margin-top: 4px;" />
+      </div>
+      <div style="margin-bottom: 12px;">
+        <span style="font-size: 10px; color: var(--text-dim);">Item Description / Particulars:</span>
+        <input type="text" id="editItemName" class="input-box" style="margin-top: 4px;" />
+      </div>
+      <div class="input-grid" style="margin-bottom: 20px;">
+        <div>
+          <span style="font-size: 10px; color: var(--text-dim);">Quantity:</span>
+          <input type="number" id="editItemQty" class="input-box" style="margin-top: 4px;" min="1" />
+        </div>
+        <div>
+          <span style="font-size: 10px; color: var(--text-dim);">Rate (₹):</span>
+          <input type="number" id="editItemRate" class="input-box" style="margin-top: 4px;" min="0" />
+        </div>
+      </div>
+      
+      <div style="display:flex; gap:10px; justify-content:flex-end;">
+        <button onclick="saveEditedItem()" style="background:#6366f1; color:white; border:none; padding:10px 20px; border-radius:8px; font-weight:700; cursor:pointer;">Save Changes</button>
+        <button onclick="closeEditItemModal()" style="background:#334155; color:#cbd5e1; border:none; padding:10px 20px; border-radius:8px; font-weight:700; cursor:pointer;">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3D PIN LOCK SCREEN -->
+  <div id="pinLockScreen">
+    <div class="cyber-lock-container" onclick="document.getElementById('appPinInput').focus()">
+      <div style="font-size:36px; margin-bottom:10px;">🔐</div>
+      <h2 style="color:white; font-size:20px; font-weight:900; letter-spacing:1px;">R.S. HOME PRODUCT</h2>
+      <p style="color:#06b6d4; font-size:11px; font-weight:700; text-transform:uppercase; margin-bottom:24px;">Secure Billing System</p>
+      
+      <input type="password" id="appPinInput" maxlength="4" class="pin-input-hidden" oninput="handlePinInput(this)" autofocus />
+      
+      <div class="pin-dots-display">
+        <div class="pin-dot" id="dot-0"></div>
+        <div class="pin-dot" id="dot-1"></div>
+        <div class="pin-dot" id="dot-2"></div>
+        <div class="pin-dot" id="dot-3"></div>
+      </div>
+      <p style="font-size:11px; color:#94a3b8;">Enter 4-Digit PIN (Default: 7860)</p>
+    </div>
+
+    <div id="funnyPopup">
+      <div style="font-size:40px; margin-bottom:8px;">🚨</div>
+      <h3 style="color:#ef4444; font-size:18px; font-weight:900; margin-bottom:8px;">GALAT PIN!</h3>
+      <p id="popupDialogue" style="color:#e2e8f0; font-size:13px; margin-bottom:16px;">Sahi 4-digit PIN enter karein.</p>
+      <button onclick="closeFunnyPopup()" style="background:#ef4444; color:white; border:none; padding:10px 20px; border-radius:8px; font-weight:700; cursor:pointer; width:100%;">Dobara Koshish Karein</button>
+    </div>
+  </div>
+
+  <!-- Left Sidebar -->
+  <div class="sidebar no-print">
+    <div>
+      <div class="sidebar-brand">
+        <div style="background: var(--primary-gradient); width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 900; color: white;">RS</div>
+        <div>
+          <h2>R.S. Home Product</h2>
+          <p>Billing Studio</p>
+        </div>
+      </div>
+      <div class="nav-menu">
+        <button class="nav-item active" id="tabBtnBilling" onclick="showTab('billing')">🏠 New Bill / Dashboard</button>
+        <button class="nav-item" id="tabBtnHistory" onclick="showTab('history')">📂 Bills History (<span id="historyCount">0</span>)</button>
+        <button class="nav-item" id="tabBtnProducts" onclick="showTab('products')">📦 Manage Products</button>
+        <button class="nav-item" id="tabBtnStatement" onclick="showTab('statement')">📜 Customer Ledger Sheet</button>
+      </div>
+    </div>
+    <div class="promo-box">
+      <h4>R.S. Home Product</h4>
+      <p>Quality Sauces & Vinegar 🌿</p>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="header-bar no-print">
+      <div class="search-box">
+        <span>🔍</span>
+        <input type="text" id="globalSearchInput" placeholder="Search customer or bill..." oninput="handleGlobalSearch(this)" />
+      </div>
+      <div class="header-right">
+        <input type="file" id="restoreFileInput" accept=".json" style="display:none;" onchange="handleFileRestore(event)" />
+        <button class="btn-action-tool" onclick="exportDataBackup()">💾 Backup</button>
+        <button class="btn-action-tool" onclick="triggerRestore()">📥 Restore</button>
+        <div class="admin-profile">
+          <div style="background:#10b981; width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:11px;">RS</div>
+          <div style="font-size:12px; font-weight:700;">Admin <span style="font-size:10px; color:var(--text-dim); display:block;">R.S. Jharia</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1. BILLING TAB -->
+    <div id="tab-billing" class="tab-content active">
+      
+      <div id="draftBanner" style="display:none; background:#1e1b4b; border:1px solid #6366f1; padding:12px 18px; border-radius:12px; margin-bottom:16px; justify-content:space-between; align-items:center;">
+        <div>
+          <div style="font-size:13px; color:white; font-weight:700;">Aapka ek adha-adhura bill (Draft) bacha hai!</div>
+          <div id="draftBannerInfo" style="font-size:11px; color:#cbd5e1;">Customer: --</div>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button onclick="restoreDraftWorkspace()" style="background:#6366f1; color:white; border:none; padding:7px 14px; border-radius:8px; font-weight:700; cursor:pointer; font-size:12px;">Resume 🔄</button>
+          <button onclick="discardDraftWorkspace()" style="background:#334155; color:#cbd5e1; border:none; padding:7px 10px; border-radius:8px; font-weight:600; cursor:pointer; font-size:12px;">Discard ✕</button>
+        </div>
+      </div>
+
+      <div class="app-wrapper">
+        
+        <!-- Input Panel -->
+        <div class="card-vibrant no-print">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 14px;">
+            <div style="font-size: 15px; font-weight: 900; color: white;">📝 Create R.S. Bill</div>
+            <span id="editBadge" style="display:none; background:#f59e0b; color:black; padding:3px 10px; border-radius:6px; font-size:10px; font-weight:800;">EDITING</span>
+          </div>
+
+          <div class="section-box">
+            <div class="section-box-title">👤 Customer Details</div>
+            <div class="input-grid-3" style="grid-template-columns: 1.2fr 1fr;">
+              <div>
+                <span style="font-size: 10px; color: var(--text-dim);">Customer Name *</span>
+                <input type="text" id="inCustName" class="input-box" placeholder="Customer Name" oninput="updateLiveMeta()" />
+              </div>
+              <div>
+                <span style="font-size: 10px; color: var(--text-dim);">Date</span>
+                <input type="date" id="inBillDate" class="input-box" oninput="updateLiveMeta()" />
+              </div>
+            </div>
+            <div style="margin-top: 10px;">
+              <span style="font-size: 10px; color: var(--text-dim);">Address</span>
+              <input type="text" id="inCustAddress" class="input-box" placeholder="Customer Address" oninput="updateLiveMeta()" />
+            </div>
+            <div class="input-grid" style="margin-top: 10px;">
+              <div>
+                <span style="font-size: 10px; color: var(--text-dim);">GSTIN / Unique ID</span>
+                <input type="text" id="inCustGst" class="input-box" placeholder="GSTIN (if any)" oninput="updateLiveMeta()" />
+              </div>
+              <div style="display:grid; grid-template-columns: 1fr 1fr; gap:6px;">
+                <div>
+                  <span style="font-size: 10px; color: var(--text-dim);">State Code</span>
+                  <input type="text" id="inStateCode" class="input-box" value="20" oninput="updateLiveMeta()" />
+                </div>
+                <div>
+                  <span style="font-size: 10px; color: var(--text-dim);">State</span>
+                  <input type="text" id="inState" class="input-box" value="Jharkhand" oninput="updateLiveMeta()" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-box">
+            <div class="section-box-title">⚡ 1-Tap Quick Chips & Dropdown</div>
+            
+            <!-- Quick Tap Chips Container -->
+            <div id="quickProductsContainer" style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px;"></div>
+
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+              <div>
+                <span style="font-size: 10px; color: var(--text-dim);">Select Product (Dropdown)</span>
+                <select id="inItemNameSelect" class="input-box"></select>
+              </div>
+              <div>
+                <span style="font-size: 10px; color: #38bdf8; font-weight:700;">Particulars / Description (Editable e.g. VINEGAR - 1L):</span>
+                <input type="text" id="inItemName" class="input-box" style="margin-top:4px;" placeholder="Product description for bill..." />
+              </div>
+              <div class="input-grid">
+                <div>
+                  <span style="font-size: 10px; color: var(--text-dim);">Quantity</span>
+                  <input type="number" id="inItemQty" class="input-box" value="1" min="1" />
+                </div>
+                <div>
+                  <span style="font-size: 10px; color: var(--text-dim);">Rate (₹ - Editable)</span>
+                  <input type="number" id="inItemPrice" class="input-box" placeholder="Rate" min="0" />
+                </div>
+              </div>
+              <button class="btn-add" onclick="addItem()">+ Add Item to Bill</button>
+            </div>
+          </div>
+
+          <div class="section-box">
+            <div class="section-box-title">💳 Payment & Balance Due</div>
+            <div class="input-grid" style="margin-bottom: 10px;">
+              <div>
+                <span style="font-size: 10px; color: var(--text-dim);">Payment Mode:</span>
+                <select id="inPayMode" class="input-box">
+                  <option value="Cash">Cash</option>
+                  <option value="Online">Online / UPI</option>
+                </select>
+              </div>
+              <div>
+                <span style="font-size: 10px; color: #34d399; font-weight:700;">Paid Now (₹):</span>
+                <input type="number" id="inPaidAmount" class="input-box" placeholder="0" min="0" oninput="calculate()" />
+              </div>
+            </div>
+            <div>
+              <span style="font-size: 10px; color: #f87171; font-weight:700;">Balance Due:</span>
+              <input type="text" id="inDueAmount" class="input-box mono" style="color:#f87171;" value="₹0.00" readonly />
+            </div>
+          </div>
+
+          <div class="btn-group-actions">
+            <button class="btn-save" onclick="saveCurrentBill()">💾 Save Bill</button>
+            <button class="btn-print" onclick="printCurrentBill()">🖨️ Print Exact Bill</button>
+          </div>
+          <button class="btn-reset" onclick="resetForNextBill()">🔄 Reset (New Bill)</button>
+        </div>
+
+        <!-- EXACT ORIGINAL BILL PREVIEW -->
+        <div class="preview-container">
+          <div class="rs-pad">
+            <div>
+              <div class="rs-bill-header">
+                <div class="rs-top-info">
+                  <div style="width: 32%;">
+                    GSTIN : <strong>20GK1PS1473KIZW</strong><br>
+                    MSME- UDYAM: JH-04-0009074<br>
+                    <span style="font-size:9px; font-weight:normal;">fssai TRANNING : BMACOVID103/29</span>
+                  </div>
+                  <div style="width: 36%; text-align: center; font-size: 9px;">
+                    COMPOSITION TAXABLE PERSON NOT ELIGIBLE TO COLLECT TAX ON SUPPLIES<br>
+                    GOVERNMENT OF INDIA (STATE OF JHARKHAND)<br>
+                    DEPARTMENT OF GOODS AND SERVICE TAX
+                  </div>
+                  <div style="width: 32%; text-align: right;">
+                    <br>Mob.: <strong>8340596102</strong>
+                  </div>
+                </div>
+
+                <div class="rs-title-section">
+                  <div class="rs-logo-box">
+                    <img src="logo.png" alt="Logo" style="max-width: 70px; height: auto;" onerror="this.style.display='none';">
+                  </div>
+                  <div class="rs-text-center">
+                    <div style="font-size: 11px; font-weight: bold; text-decoration: underline;">BILL OF SUPPLY</div>
+                    <div style="font-size: 9px; font-weight: normal; margin-top: 1px;">(See Invoice Rule 49)</div>
+                    <div class="rs-shop-title">R.S. HOME PRODUCT</div>
+                    <div class="rs-shop-sub">Katras More, Kendua Road Jharia - 828111</div>
+                  </div>
+                </div>
+
+                <div class="rs-products-tagline">
+                  YUMMY SWEET SAUCE, YUMMY CHILLY SAUCE, CLASSICAL SWEET SAUCE,<br>
+                  CLASSICAL CHILLY SAUCE, YUMMY SOYA SAUCE, VINEGAR, E.T.C.
+                </div>
+                <div style="text-align: center; font-size: 10px; font-weight: bold; margin-top: 2px;">
+                  Regd. No.: 21119172000094
+                </div>
+              </div>
+
+              <div class="rs-meta-grid">
+                <div style="display: flex; justify-content: space-between; gap: 20px;">
+                  <div class="rs-meta-line" style="flex: 1;"><span class="label">Inv. No.:</span><span class="value" id="dispInvNo">--</span></div>
+                  <div class="rs-meta-line" style="flex: 1;"><span class="label" style="margin-left: auto;">Date:</span><span class="value" id="dispDate">--/--/----</span></div>
+                </div>
+                <div class="rs-meta-line"><span class="label">Name:</span><span class="value" id="dispCustName">--</span></div>
+                <div class="rs-meta-line"><span class="label">Address:</span><span class="value" id="dispCustAddress">--</span></div>
+                <div class="rs-meta-line">
+                  <span class="label">GSTIN/Unique ID:</span><span class="value" id="dispGst" style="margin-right: 15px;">--</span>
+                  <span class="label">State Code:</span><span class="value" id="dispStateCode" style="margin-right: 15px; flex-grow:0; width:45px;">20</span>
+                  <span class="label">State:</span><span class="value" id="dispState" style="flex-grow:0; width:110px;">Jharkhand</span>
+                </div>
+              </div>
+
+              <table class="rs-table">
+                <thead>
+                  <tr>
+                    <th rowspan="2" style="width: 6%;">Sl.<br>No.</th>
+                    <th rowspan="2" style="width: 44%; text-align: left;">PARTICULARS</th>
+                    <th rowspan="2" style="width: 10%;">Qty.</th>
+                    <th rowspan="2" style="width: 12%;">Rate</th>
+                    <th colspan="2" style="width: 28%;">Amount</th>
+                  </tr>
+                  <tr>
+                    <th style="width: 20%; border-top: 1px solid #000;">Rs.</th>
+                    <th style="width: 8%; border-top: 1px solid #000;">P.</th>
+                  </tr>
+                </thead>
+                <tbody id="billBody"></tbody>
+                <tfoot>
+                  <tr style="font-weight: bold;">
+                    <td colspan="4" style="text-align: right; border-right: 1px solid #000;">TOTAL &nbsp;</td>
+                    <td style="text-align: right; border-right: 1px solid #000;" id="dispTotalRs">0</td>
+                    <td style="text-align: center;" id="dispTotalP">00</td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+
+            <div>
+              <div class="rs-footer-box">
+                <div style="margin-bottom: 6px;">Amount in words : <span id="lblWords" style="font-weight: normal; font-style: italic;">Zero Rupees Only</span></div>
+                
+                <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                  <div class="rs-terms">
+                    • Goods once sold will not be taken back.<br>
+                    • No Guarantee No Refund No claim.<br>
+                    • All disputes subject of Dhanbad Jurisdiction.
+                  </div>
+                  <div style="text-align: right;">
+                    <div style="font-size: 11px; font-weight: bold; margin-bottom: 25px;">R.S. HOME PRODUCT</div>
+                    <div style="font-size: 11px; border-top: 1px solid #000; padding-top: 4px; width: 150px;">Sign. Proprietor</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="no-print" style="margin-top: 8px; border-top: 1px dashed #cbd5e1; padding-top: 6px; display: flex; justify-content: flex-end; gap: 16px; font-size: 12px; font-weight: 700;">
+                <div class="cr-text">Paid: ₹<span id="dispTotalPaid">0.00</span></div>
+                <div class="dr-text">Due: ₹<span id="dispDueAmount">0.00</span></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 2. BILLS HISTORY TAB -->
+    <div id="tab-history" class="tab-content">
+      <div class="card-vibrant" style="background:#0b0f19;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+          <h3 style="font-size: 16px; font-weight: 800; color: white;">📂 Bills History Register</h3>
+          <input type="text" id="searchHistory" class="input-box" style="width: 280px;" placeholder="Search customer or invoice..." oninput="filterHistory()" />
+        </div>
+        <div style="overflow-x: auto;">
+          <table class="history-table">
+            <thead>
+              <tr>
+                <th>Inv No</th>
+                <th>Date</th>
+                <th>Customer Name</th>
+                <th>Address</th>
+                <th>Total Amount</th>
+                <th>Paid</th>
+                <th>Due</th>
+                <th style="text-align: center;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="historyTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. MANAGE PRODUCTS TAB -->
+    <div id="tab-products" class="tab-content">
+      <div class="card-vibrant" style="background:#0b0f19; max-width: 700px; margin: 0 auto;">
+        <h3 style="font-size: 18px; font-weight: 900; color: white; margin-bottom: 16px;">📦 Manage Pre-filled Products & Rates</h3>
+        <p style="font-size: 12px; color: var(--text-dim); margin-bottom: 20px;">Yahan se aap naye products add kar sakte hain ya purane products ke default rates change kar sakte hain.</p>
+        
+        <div class="section-box" style="margin-bottom: 24px;">
+          <div class="section-box-title">Add New Product</div>
+          <div class="input-grid" style="margin-bottom: 12px;">
+            <div>
+              <span style="font-size: 10px; color: var(--text-dim);">Product Name</span>
+              <input type="text" id="newProdName" class="input-box" style="margin-top:4px;" placeholder="e.g. SPECIAL SAUCE 1L" />
+            </div>
+            <div>
+              <span style="font-size: 10px; color: var(--text-dim);">Default Rate (₹)</span>
+              <input type="number" id="newProdRate" class="input-box" style="margin-top:4px;" placeholder="50" min="0" />
+            </div>
+          </div>
+          <button class="btn-add" onclick="addNewProductToCatalog()">+ Add Product to Catalog</button>
+        </div>
+
+        <div style="overflow-x: auto;">
+          <table class="history-table">
+            <thead>
+              <tr>
+                <th>Product Name</th>
+                <th>Default Rate (₹)</th>
+                <th style="text-align: center;">Action</th>
+              </tr>
+            </thead>
+            <tbody id="productsTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. CUSTOMER LEDGER SHEET TAB -->
+    <div id="tab-statement" class="tab-content">
+      <div class="card-vibrant no-print" style="background:#0b0f19; margin-bottom: 20px;">
+        <div style="display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-end; justify-content: space-between;">
+          <div style="min-width: 200px;">
+            <span style="font-size: 12px; color: var(--text-dim); font-weight:700;">Select Customer / Party:</span>
+            <select id="selectPartyLedger" class="input-box" style="margin-top: 6px;" onchange="generateStatement()"></select>
+          </div>
+
+          <div style="display: flex; gap: 10px; align-items: center; background:#030712; padding:10px 14px; border-radius:12px; border:1px solid var(--border);">
+            <div>
+              <span style="font-size: 11px; color: var(--text-dim);">From Date:</span>
+              <input type="date" id="filterFromDate" class="input-box" style="padding:6px; font-size:12px; width:130px;" onchange="generateStatement()" />
+            </div>
+            <div>
+              <span style="font-size: 11px; color: var(--text-dim);">To Date:</span>
+              <input type="date" id="filterToDate" class="input-box" style="padding:6px; font-size:12px; width:130px;" onchange="generateStatement()" />
+            </div>
+          </div>
+
+          <div style="background:#030712; padding:10px 14px; border-radius:12px; border:1px solid #059669; display: flex; flex-wrap: wrap; gap: 8px; align-items: center;">
+            <span style="font-size: 12px; color: #34d399; font-weight:700;">Receive Payment:</span>
+            <input type="date" id="quickRecDate" class="input-box" style="width: 125px; padding:7px;" title="Payment Date" />
+            <input type="number" id="quickRecAmount" class="input-box" style="width: 95px; padding:7px;" placeholder="₹ Amount" min="1" />
+            <select id="quickRecMode" class="input-box" style="width: 85px; padding:7px;">
+              <option value="Cash">Cash</option>
+              <option value="Bank">Online</option>
+            </select>
+            <input type="text" id="quickRecDesc" class="input-box" style="width: 140px; padding:7px;" placeholder="Payment Note..." />
+            <button onclick="quickReceivePayment()" style="background:#059669; color:white; border:none; padding:8px 16px; border-radius:8px; font-weight:700; cursor:pointer;">Save</button>
+          </div>
+
+          <button class="btn-print" onclick="window.print()" style="padding: 12px 20px;">🖨️ Print Statement</button>
+        </div>
+      </div>
+
+      <div class="statement-sheet">
+        <div class="shop-banner">
+          <div class="banner-left">
+            <div class="banner-brand-title">R.S. HOME PRODUCT</div>
+            <div class="banner-sub">Quality Sauces & Vinegar</div>
+            <div style="font-size: 11px; color: #cbd5e1; margin-top: 2px;">Katras More, Kendua Road Jharia - 828111</div>
+          </div>
+          <div class="banner-right">
+            <div class="banner-phone">📞 8340596102</div>
+            <div>GSTIN: 20GK1PS1473KIZW</div>
+            <div>Regd. No.: 21119172000094</div>
+          </div>
+        </div>
+
+        <div style="text-align: center; margin: 14px 0 20px 0;">
+          <h3 style="font-size: 16px; font-weight: 800; text-decoration: underline; letter-spacing: 0.5px; color:#0f172a;">CUSTOMER LEDGER STATEMENT</h3>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; margin-bottom: 16px; font-size: 13px;">
+          <div><strong>Customer Name:</strong> <span id="stLedgerName" style="color:#4f46e5; font-weight:700; font-size: 16px;">--</span></div>
+          <div><strong>Statement Date:</strong> <span id="stGeneratedDate">--</span></div>
+        </div>
+
+        <table class="rs-table">
+          <thead>
+            <tr>
+              <th style="width: 105px;">DATE</th>
+              <th>PARTICULARS</th>
+              <th style="width: 100px;">VCH TYPE</th>
+              <th style="width: 100px;">VCH NO.</th>
+              <th style="width: 110px; text-align: right;">DEBIT (DR)</th>
+              <th style="width: 110px; text-align: right;">CREDIT (CR)</th>
+              <th style="width: 120px; text-align: right;">BALANCE DUE</th>
+              <th class="no-print" style="width: 85px; text-align: center;">ACTION</th>
+            </tr>
+          </thead>
+          <tbody id="statementBody"></tbody>
+        </table>
+
+        <div style="margin-top: 40px; display: flex; justify-content: space-between; align-items: flex-end;">
+          <div style="font-size: 11px; color: #64748b;">This is a computer generated ledger statement.</div>
+          <div style="text-align: right; border-top: 1px solid #333; width: 220px; padding-top: 6px; font-size: 12px; font-weight: 700; color:#1e293b;">
+            Authorised Signature
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
