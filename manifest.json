@@ -1,0 +1,13 @@
+{
+  "background_color": "#050814",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "R.S. Home Product",
+  "orientation": "any",
+  "scope": "/",
+  "short_name": "RS Bill",
+  "start_url": "/",
+  "theme_color": "#ffffff",
+  "id": "rs.home.product.app",
+  "description": "R.S. Home Product Billing and Customer Ledger System"
+}
