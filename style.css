@@ -117,19 +117,59 @@ body { background: var(--bg); color: var(--text); min-height: 100vh; display: fl
 
 /* Mobile View Adjustments */
 @media (max-width: 900px) {
-  .sidebar { display: none !important; }
-  .main-content { margin-left: 0 !important; padding: 12px !important; width: 100% !important; max-width: 100% !important; }
-  .app-wrapper { grid-template-columns: 1fr !important; }
-  .search-box { width: 100% !important; }
-  .preview-container { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-}
+  /* 1. Sidebar ko gayab hone se roka aur Bottom Navigation bana diya */
+  .sidebar { 
+    display: flex !important; 
+    position: fixed; 
+    bottom: 0; 
+    left: 0; 
+    width: 100%; 
+    height: auto; 
+    padding: 8px 12px !important; 
+    border-right: none; 
+    border-top: 1px solid var(--border); 
+    z-index: 1000; 
+    background: rgba(11, 15, 25, 0.95);
+    backdrop-filter: blur(10px);
+    flex-direction: row;
+  }
+  .sidebar > div:first-child { width: 100%; }
+  .sidebar-brand, .promo-box { display: none !important; }
+  
+  /* Menu items ko horizontal scrollable bana diya (Swipe left-right) */
+  .nav-menu { 
+    flex-direction: row !important; 
+    overflow-x: auto; 
+    gap: 10px; 
+    padding-bottom: 4px;
+  }
+  .nav-menu::-webkit-scrollbar { height: 0px; } /* Clean look ke liye scrollbar hidden */
+  .nav-item { 
+    white-space: nowrap; 
+    width: auto !important; 
+    padding: 10px 16px !important; 
+    font-size: 13px !important; 
+    flex-shrink: 0;
+  }
 
-@media print {
-  body { background: white !important; color: black !important; padding: 0 !important; }
-  .sidebar, .header-bar, .card-vibrant, .no-print, #pinLockScreen { display: none !important; }
-  .main-content { margin: 0 !important; padding: 0 !important; max-width: 100% !important; }
-  .preview-container { border: none !important; box-shadow: none !important; overflow: visible !important; }
-  .rs-pad { min-width: 100% !important; padding: 0 !important; }
-  .statement-sheet { box-shadow: none !important; margin: 0 !important; padding: 10px !important;}
-  .shop-banner { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  /* 2. Main content ko thik se set kiya taaki bottom nav ke piche na chhupe */
+  .main-content { 
+    margin-left: 0 !important; 
+    padding: 16px 16px 90px 16px !important; 
+    width: 100% !important; 
+    max-width: 100% !important; 
+  }
+  .app-wrapper { grid-template-columns: 1fr !important; }
+  
+  /* 3. Header Bar Congestion Fix */
+  .header-bar { flex-direction: column; align-items: stretch; gap: 14px; padding: 16px !important; }
+  .search-box { width: 100% !important; }
+  .header-right { justify-content: space-between; flex-wrap: wrap; width: 100%; gap: 10px; }
+  
+  /* 4. Form Fields & Buttons Congestion Fix (Sab ek ke niche ek) */
+  .input-grid, .input-grid-3 { grid-template-columns: 1fr !important; gap: 12px; }
+  .btn-group-actions { grid-template-columns: 1fr !important; gap: 10px; }
+
+  /* Bill Preview - Scrollable on mobile to save print layout */
+  .preview-container { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 16px; margin-top: 20px;}
 }
