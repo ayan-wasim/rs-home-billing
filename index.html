@@ -127,8 +127,8 @@
     <!-- 1. BILLING TAB -->
     <div id="tab-billing" class="tab-content active">
       
-      <!-- Mobile View Bill Floating Button Fixed -->
-      <button id="mobileViewBillBtn" class="no-print" onclick="document.querySelector('.preview-container').scrollIntoView({behavior: 'smooth'})" style="display:none; position:fixed; bottom:24px; right:24px; background:#10b981; color:white; border:none; padding:12px 18px; border-radius:30px; font-size:13px; font-weight:800; box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4); z-index:9999;">👁️ View Bill</button>
+      <!-- Mobile View Bill Floating Button (Moved to Top-Right) -->
+      <button id="mobileViewBillBtn" class="no-print" onclick="document.querySelector('.preview-container').scrollIntoView({behavior: 'smooth'})" style="display:none; position:fixed; top:16px; right:16px; background:#10b981; color:white; border:none; padding:8px 14px; border-radius:20px; font-size:12px; font-weight:800; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); z-index:99999;">👁️ View Bill</button>
 
       <div id="draftBanner" style="display:none; background:#1e1b4b; border:1px solid #6366f1; padding:12px 18px; border-radius:12px; margin-bottom:16px; justify-content:space-between; align-items:center;">
         <div>
@@ -477,14 +477,14 @@
             <table class="rs-table">
               <thead>
                 <tr>
-                  <th style="width: 12%;">DATE</th>
-                  <th style="width: 38%;">PARTICULARS</th>
-                  <th style="width: 12%;">VCH TYPE</th>
-                  <th style="width: 8%;">VCH NO.</th>
-                  <th style="width: 10%; text-align: right;">DEBIT (DR)</th>
-                  <th style="width: 10%; text-align: right;">CREDIT (CR)</th>
-                  <th style="width: 10%; text-align: right;">BALANCE DUE</th>
-                  <th class="no-print" style="width: 85px; text-align: center;">ACTION</th>
+                  <th style="width: 10%;">DATE</th>
+                  <th style="width: 32%;">PARTICULARS</th>
+                  <th style="width: 10%;">VCH TYPE</th>
+                  <th style="width: 7%;">VCH NO.</th>
+                  <th style="width: 11%; text-align: right;">DEBIT (DR)</th>
+                  <th style="width: 11%; text-align: right;">CREDIT (CR)</th>
+                  <th style="width: 11%; text-align: right;">BALANCE DUE</th>
+                  <th class="no-print" style="width: 8%; text-align: center;">ACTION</th>
                 </tr>
               </thead>
               <tbody id="statementBody"></tbody>
