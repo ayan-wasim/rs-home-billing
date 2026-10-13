@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>R.S. HOME PRODUCT - Billing Studio</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="manifest" href="manifest.json" />
@@ -114,6 +114,8 @@
         </div>
       </div>
       <div class="header-right">
+        <!-- Mobile View Bill Top Button -->
+        <button id="mobileViewBillBtn" class="no-print" onclick="document.querySelector('.preview-container').scrollIntoView({behavior: 'smooth'})" style="display:none; background:#10b981; color:white; border:none; padding:6px 12px; border-radius:8px; font-size:11px; font-weight:800; cursor:pointer;">👁️ View Bill</button>
         <input type="file" id="restoreFileInput" accept=".json" style="display:none;" onchange="handleFileRestore(event)" />
         <button class="btn-action-tool" onclick="exportDataBackup()">💾 Backup</button>
         <button class="btn-action-tool" onclick="triggerRestore()">📥 Restore</button>
@@ -126,9 +128,6 @@
 
     <!-- 1. BILLING TAB -->
     <div id="tab-billing" class="tab-content active">
-      
-      <!-- Mobile View Bill Floating Button (Moved to Top-Right) -->
-      <button id="mobileViewBillBtn" class="no-print" onclick="document.querySelector('.preview-container').scrollIntoView({behavior: 'smooth'})" style="display:none; position:fixed; top:16px; right:16px; background:#10b981; color:white; border:none; padding:8px 14px; border-radius:20px; font-size:12px; font-weight:800; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); z-index:99999;">👁️ View Bill</button>
 
       <div id="draftBanner" style="display:none; background:#1e1b4b; border:1px solid #6366f1; padding:12px 18px; border-radius:12px; margin-bottom:16px; justify-content:space-between; align-items:center;">
         <div>

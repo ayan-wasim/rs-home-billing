@@ -92,8 +92,7 @@ body { background: var(--bg); color: var(--text); min-height: 100vh; display: fl
 .dr-text { color: #dc2626; font-weight: 700; }
 .cr-text { color: #16a34a; font-weight: 700; }
 
-.statement-sheet-wrapper { overflow-x: auto; width: 100%; -webkit-overflow-scrolling: touch; }
-.statement-sheet { background: white; color: #1e293b; padding: 30px; border-radius: 20px; margin-top: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); min-width: 740px; max-width: 100%; }
+.statement-sheet { background: white; color: #1e293b; padding: 30px; border-radius: 20px; margin-top: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); min-width: 720px; }
 .shop-banner { display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); padding: 18px 24px; border-radius: 16px; margin-bottom: 20px; border: 1px solid rgba(99, 102, 241, 0.3); }
 .banner-left { display: flex; flex-direction: column; }
 .banner-brand-title { font-size: 24px; font-weight: 900; color: #ffffff !important; letter-spacing: -0.5px; }
@@ -118,7 +117,7 @@ body { background: var(--bg); color: var(--text); min-height: 100vh; display: fl
 #funnyPopup { display: none; position: absolute; background: #0b0f19; border: 2px solid #ef4444; border-radius: 20px; padding: 24px; text-align: center; max-width: 350px; z-index: 2000001; top: 50%; left: 50%; transform: translate(-50%, -50%); }
 
 /* =========================================================
-   MOBILE RESPONSIVE & PINCH-ZOOM FIXES
+   PERFECT MOBILE VIEW FIXES (NATIVE ZOOM & FIT)
    ========================================================= */
 @media (max-width: 900px) {
   #mobileMenuBtn, #closeMenuBtn { display: block !important; }
@@ -166,7 +165,7 @@ body { background: var(--bg); color: var(--text); min-height: 100vh; display: fl
   .btn-group-actions { display: flex !important; flex-direction: column !important; gap: 12px; }
   .btn-save, .btn-print { width: 100%; padding: 16px; font-size: 15px; }
   
-  /* Auto-fit and pinch-zoom support */
+  /* Auto-fit and zoom settings */
   .preview-container, .statement-sheet-wrapper { 
     overflow-x: auto !important; 
     width: 100% !important;
@@ -174,7 +173,6 @@ body { background: var(--bg); color: var(--text); min-height: 100vh; display: fl
     border-radius: 16px; 
     margin-top: 10px;
     background: #fffdfd;
-    touch-action: pan-x pan-y pinch-zoom;
   }
   
   .rs-pad, .statement-sheet {
@@ -188,7 +186,7 @@ body { background: var(--bg); color: var(--text); min-height: 100vh; display: fl
   }
   
   .statement-sheet { padding: 30px !important; box-shadow: none !important; margin-top: 0 !important; }
-  .statement-sheet table { min-width: 700px; }
+  .statement-sheet table { min-width: 650px; }
   .shop-banner { flex-direction: column; align-items: flex-start; gap: 12px; }
   .banner-right { text-align: left; }
 
