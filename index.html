@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
   <title>R.S. HOME PRODUCT - Billing Studio</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="manifest" href="manifest.json" />
@@ -115,7 +115,7 @@
       </div>
       <div class="header-right">
         <!-- Mobile View Bill Top Button -->
-        <button id="mobileViewBillBtn" class="no-print" onclick="document.querySelector('.preview-container').scrollIntoView({behavior: 'smooth'})" style="display:none; background:#10b981; color:white; border:none; padding:6px 12px; border-radius:8px; font-size:11px; font-weight:800; cursor:pointer;">👁️ View Bill</button>
+        <button id="mobileViewBillBtn" class="no-print" onclick="document.querySelector('.preview-container').scrollIntoView({behavior: 'smooth'})" style="display:none; background:#10b981; color:white; border:none; padding:6px 12px; border-radius:8px; font-size:11px; font-weight:800; cursor:pointer; pointer-events:auto; z-index:99999;">👁️ View Bill</button>
         <input type="file" id="restoreFileInput" accept=".json" style="display:none;" onchange="handleFileRestore(event)" />
         <button class="btn-action-tool" onclick="exportDataBackup()">💾 Backup</button>
         <button class="btn-action-tool" onclick="triggerRestore()">📥 Restore</button>
@@ -234,7 +234,7 @@
 
           <div class="btn-group-actions">
             <button class="btn-save" onclick="saveCurrentBill()">💾 Save Bill</button>
-            <button class="btn-print" onclick="printCurrentBill()">🖨️ Print Exact Bill</button>
+            <button class="btn-print" onclick="try { window.print(); } catch(e) { setTimeout(function(){ window.print(); }, 100); }">🖨️ Print Exact Bill</button>
           </div>
           <button class="btn-reset" onclick="resetForNextBill()">🔄 Reset (New Bill)</button>
         </div>
@@ -444,7 +444,7 @@
             <button onclick="quickReceivePayment()" style="background:#059669; color:white; border:none; padding:8px 16px; border-radius:8px; font-weight:700; cursor:pointer;">Save</button>
           </div>
 
-          <button class="btn-print" onclick="window.print()" style="padding: 12px 20px;">🖨️ Print Statement</button>
+          <button class="btn-print" onclick="try { window.print(); } catch(e) { setTimeout(function(){ window.print(); }, 100); }" style="padding: 12px 20px;">🖨️ Print Statement</button>
         </div>
       </div>
 

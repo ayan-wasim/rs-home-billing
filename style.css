@@ -56,7 +56,7 @@ body { background: var(--bg); color: var(--text); min-height: 100vh; display: fl
 .btn-add { background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: white; border: none; padding: 12px; border-radius: 12px; font-weight: 700; cursor: pointer; width: 100%; font-size: 14px; margin-top: 8px;}
 .btn-group-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 16px; }
 .btn-save { background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: white; border: none; padding: 14px; border-radius: 14px; font-weight: 700; cursor: pointer; font-size: 14px; }
-.btn-print { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none; padding: 14px; border-radius: 14px; font-weight: 700; cursor: pointer; font-size: 14px; }
+.btn-print { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none; padding: 14px; border-radius: 14px; font-weight: 700; cursor: pointer; font-size: 14px; pointer-events: auto !important; z-index: 999999; }
 .btn-reset { background: rgba(51, 41, 85, 0.4); color: #cbd5e1; border: 1px solid var(--border); padding: 12px; border-radius: 12px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 12px; }
 
 /* EXACT PHOTO BILL PREVIEW */
@@ -163,9 +163,8 @@ body { background: var(--bg); color: var(--text); min-height: 100vh; display: fl
   .input-grid, .input-grid-3 { grid-template-columns: 1fr !important; gap: 12px; }
   
   .btn-group-actions { display: flex !important; flex-direction: column !important; gap: 12px; }
-  .btn-save, .btn-print { width: 100%; padding: 16px; font-size: 15px; }
+  .btn-save, .btn-print { width: 100%; padding: 16px; font-size: 15px; pointer-events: auto !important; z-index: 999999; }
   
-  /* Auto-fit with pointer-events fix for mobile tap */
   .preview-container, .statement-sheet-wrapper { 
     overflow-x: auto !important; 
     width: 100% !important;
@@ -174,6 +173,7 @@ body { background: var(--bg); color: var(--text); min-height: 100vh; display: fl
     margin-top: 10px;
     background: #fffdfd;
     pointer-events: auto !important;
+    touch-action: pan-x pan-y pinch-zoom !important;
   }
   
   .rs-pad, .statement-sheet {
