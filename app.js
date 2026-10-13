@@ -18,7 +18,10 @@ let editingItemIndex = -1;
 
 window.addEventListener("DOMContentLoaded", function () {
   loadProductsCatalog();
+  initProductDropdown();
+  
   loadAllData();
+  
   if (!isEditing && !loadDraft()) {
     initNewBill();
   }
@@ -67,13 +70,11 @@ function initProductDropdown() {
   quickContainer.innerHTML = "";
 
   prefilledProducts.forEach(p => {
-    // Populate Dropdown
     const opt = document.createElement("option");
     opt.value = p.name;
     opt.innerText = p.name;
     selectElem.appendChild(opt);
 
-    // Populate Quick Chips
     const chip = document.createElement("button");
     chip.type = "button";
     chip.innerText = p.name;
@@ -184,7 +185,6 @@ function closeAppModal() {
   if (overlay) overlay.style.display = "none";
 }
 
-// DOUBLE-CLICK TO EDIT ITEM MODAL LOGIC
 function openEditItemModal(index) {
   editingItemIndex = index;
   const it = currentItems[index];
@@ -261,8 +261,8 @@ function saveDraft() {
     currentInvNo,
     customerName: custNameElem ? custNameElem.value : "",
     customerAddress: custAddrElem ? custAddrElem.value : "",
-    items: currentItems,
-    paymentsHistory: currentPaymentsHistory
+    items: JSON.parse(JSON.stringify(currentItems)), 
+    paymentsHistory: JSON.parse(JSON.stringify(currentPaymentsHistory))
   };
   
   if (currentItems.length > 0 || (custNameElem && custNameElem.value.trim() !== "")) {
@@ -276,12 +276,14 @@ function loadDraft() {
     if (!saved) return false;
     const d = JSON.parse(saved);
     if (d && d.items && d.items.length > 0) {
-      currentItems = d.items;
-      currentPaymentsHistory = d.paymentsHistory || [];
+      currentItems = JSON.parse(JSON.stringify(d.items));
+      currentPaymentsHistory = d.paymentsHistory ? JSON.parse(JSON.stringify(d.paymentsHistory)) : [];
+      
       const custNameElem = document.getElementById("inCustName");
       const custAddrElem = document.getElementById("inCustAddress");
       if(custNameElem) custNameElem.value = d.customerName || "";
       if(custAddrElem) custAddrElem.value = d.customerAddress || "";
+
       updateLiveMeta();
       renderBill();
       
@@ -316,6 +318,9 @@ function discardDraftWorkspace() {
 }
 
 function showTab(tabName) {
+  const sb = document.getElementById("mobileSidebar");
+  if(sb && sb.classList.contains("open")) sb.classList.remove("open");
+
   document.querySelectorAll(".tab-content").forEach(el => el.classList.remove("active"));
   document.querySelectorAll(".nav-item").forEach(el => el.classList.remove("active"));
   
@@ -378,8 +383,6 @@ function initNewBill() {
   if(inCustAddress) inCustAddress.value = "";
   if(inPaidAmount) inPaidAmount.value = "";
   if(inCustGst) inCustGst.value = "";
-
-  initProductDropdown();
 
   clearDraft();
   updateLiveMeta();
@@ -550,7 +553,7 @@ function saveCurrentBill() {
     date: currentDate,
     customerName: custName,
     customerAddress: address || "--",
-    items: [...currentItems],
+    items: JSON.parse(JSON.stringify(currentItems)),
     paymentsHistory: totals.totalPaid > 0 ? [{ date: currentDate, amount: totals.totalPaid, mode: payMode }] : [],
     totals: { grandTotal: totals.subTotal, totalPaid: totals.totalPaid, due: totals.due }
   };
@@ -567,7 +570,7 @@ function saveCurrentBill() {
   refreshAllViews();
   showToast(`Bill #${currentInvNo} successfully save ho gaya! ✅`);
   
-  setTimeout(() => initNewBill(), 300);
+  initNewBill();
 }
 
 function printCurrentBill() {
@@ -634,7 +637,8 @@ function loadBillForEditing(invNo) {
   
   currentInvNo = b.invoiceNo;
   currentDate = b.date;
-  currentItems = [...b.items];
+  
+  currentItems = JSON.parse(JSON.stringify(b.items));
 
   const dispInvNo = document.getElementById("dispInvNo");
   const dispDate = document.getElementById("dispDate");
@@ -728,10 +732,14 @@ function generateStatement() {
   let ledgerTransactions = [];
 
   partyBills.forEach(b => {
+    // FIX: Ledger me bill ke andar ke saare items dikhenge ab
+    let itemDetails = b.items.map(i => `${i.name} (${i.qty})`).join(', ');
+    let desc = `Bill #${b.invoiceNo} [${itemDetails}]`;
+
     ledgerTransactions.push({
       date: b.date,
       timestamp: parseDateToTs(b.date),
-      particulars: `Invoice Sale (#${b.invoiceNo})`,
+      particulars: desc,
       vchType: "Sales",
       vchNo: b.invoiceNo,
       debit: b.totals.grandTotal,
@@ -977,10 +985,7 @@ function numberToWords(amount) {
   let num = Math.floor(amount);
   let res = "";
 
-  if (Math.floor(num / 10000000) > 0) {
-    res += getWord(Math.floor(num / 10000000)) + " Crore ";
-    num %= 10000000;
-  }
+  (Math.floor(num / 10000000) > 0) && (res += getWord(Math.floor(num / 10000000)) + " Crore ", num %= 10000000);
   if (Math.floor(num / 100000) > 0) {
     res += getWord(Math.floor(num / 100000)) + " Lakh ";
     num %= 100000;
@@ -998,4 +1003,10 @@ function numberToWords(amount) {
   }
 
   return res.trim() + " Rupees";
+}
+
+// MOBILE MENU TOGGLE LOGIC
+function toggleMobileMenu() {
+  const sb = document.getElementById("mobileSidebar");
+  if(sb) sb.classList.toggle("open");
 }

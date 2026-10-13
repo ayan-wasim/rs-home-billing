@@ -7,7 +7,7 @@
   --text: #f8fafc;
   --text-dim: #94a3b8;
 }
-* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif; -webkit-tap-highlight-color: transparent; transition: background 0.2s ease, transform 0.2s ease; }
 body { background: var(--bg); color: var(--text); min-height: 100vh; display: flex; overflow-x: hidden; user-select: none; }
 
 /* Left Sidebar */
@@ -17,8 +17,8 @@ body { background: var(--bg); color: var(--text); min-height: 100vh; display: fl
 .sidebar-brand p { font-size: 10px; color: var(--text-dim); text-transform: uppercase; font-weight: 700; margin-top: 2px; }
 
 .nav-menu { display: flex; flex-direction: column; gap: 6px; }
-.nav-item { display: flex; align-items: center; gap: 14px; padding: 12px 16px; border-radius: 12px; color: var(--text-dim); font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; border: none; background: transparent; width: 100%; text-align: left; }
-.nav-item:hover { background: rgba(255, 255, 255, 0.04); color: white; }
+.nav-item { display: flex; align-items: center; gap: 14px; padding: 12px 16px; border-radius: 12px; color: var(--text-dim); font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); border: none; background: transparent; width: 100%; text-align: left; }
+.nav-item:hover { background: rgba(255, 255, 255, 0.04); color: white; transform: translateX(4px); }
 .nav-item.active { background: var(--primary-gradient); color: white; box-shadow: 0 8px 20px rgba(99, 102, 241, 0.35); }
 
 .promo-box { background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%); border: 1px solid rgba(99, 102, 241, 0.3); padding: 16px; border-radius: 16px; text-align: center; margin-top: auto; }
@@ -34,10 +34,11 @@ body { background: var(--bg); color: var(--text); min-height: 100vh; display: fl
 .search-box input { background: transparent; border: none; color: white; outline: none; width: 100%; font-size: 13px; }
 .header-right { display: flex; align-items: center; gap: 16px; }
 .btn-action-tool { background: #111827; color: #cbd5e1; border: 1px solid var(--border); padding: 9px 16px; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 12px; transition: all 0.2s ease; }
+.btn-action-tool:hover { background: #1f2937; color: #fff; }
 
-.tab-content { display: none; }
-.tab-content.active { display: block; animation: fadeInTab 0.3s ease-out; }
-@keyframes fadeInTab { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+.tab-content { display: none; opacity: 0; transform: translateY(8px); }
+.tab-content.active { display: block; animation: smoothFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+@keyframes smoothFadeIn { to { opacity: 1; transform: translateY(0); } }
 
 .app-wrapper { display: grid; grid-template-columns: 1fr 1.3fr; gap: 24px; }
 
@@ -49,8 +50,8 @@ body { background: var(--bg); color: var(--text); min-height: 100vh; display: fl
 
 .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .input-grid-3 { display: grid; grid-template-columns: 1.2fr 1.2fr 0.8fr; gap: 10px; }
-.input-box { background: #030712; border: 1px solid var(--border); color: white; padding: 12px 14px; border-radius: 12px; font-size: 14px; width: 100%; outline: none; }
-.input-box:focus { border-color: var(--primary); }
+.input-box { background: #030712; border: 1px solid var(--border); color: white; padding: 12px 14px; border-radius: 12px; font-size: 14px; width: 100%; outline: none; transition: border-color 0.2s; }
+.input-box:focus { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2); }
 
 .btn-add { background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: white; border: none; padding: 12px; border-radius: 12px; font-weight: 700; cursor: pointer; width: 100%; font-size: 14px; margin-top: 8px;}
 .btn-group-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 16px; }
@@ -93,7 +94,7 @@ body { background: var(--bg); color: var(--text); min-height: 100vh; display: fl
 .dr-text { color: #dc2626; font-weight: 700; }
 .cr-text { color: #16a34a; font-weight: 700; }
 
-.statement-sheet { background: white; color: #1e293b; padding: 30px; border-radius: 20px; margin-top: 20px; overflow-x: auto; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+.statement-sheet { background: white; color: #1e293b; padding: 30px; border-radius: 20px; margin-top: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); min-width: 720px; }
 .shop-banner { display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); padding: 18px 24px; border-radius: 16px; margin-bottom: 20px; border: 1px solid rgba(99, 102, 241, 0.3); }
 .banner-left { display: flex; flex-direction: column; }
 .banner-brand-title { font-size: 24px; font-weight: 900; color: #ffffff !important; letter-spacing: -0.5px; }
@@ -102,8 +103,10 @@ body { background: var(--bg); color: var(--text); min-height: 100vh; display: fl
 .banner-phone { background: #f97316; color: white; padding: 4px 12px; border-radius: 6px; font-weight: 800; display: inline-block; margin-bottom: 4px; box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3); }
 
 /* Modals & Popups */
-#appToast { position: fixed; top: 24px; right: 24px; background: #10b981; color: white; padding: 14px 28px; border-radius: 12px; font-weight: 700; z-index: 100000; display: none; }
-#appModalOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 999999; display: none; align-items: center; justify-content: center; }
+#appToast { position: fixed; top: 24px; right: 24px; background: #10b981; color: white; padding: 14px 28px; border-radius: 12px; font-weight: 700; z-index: 100000; display: none; animation: toastSlide 0.3s ease; }
+@keyframes toastSlide { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+#appModalOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 999999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
 .app-modal-box { background: #1e293b; border: 1px solid var(--border); border-radius: 20px; padding: 28px; width: 90%; max-width: 420px; text-align: center; }
 
 /* 3D PIN Lock Screen */
@@ -115,61 +118,133 @@ body { background: var(--bg); color: var(--text); min-height: 100vh; display: fl
 .pin-input-hidden { position: absolute; left: -9999px; top: -9999px; opacity: 0; }
 #funnyPopup { display: none; position: absolute; background: #0b0f19; border: 2px solid #ef4444; border-radius: 20px; padding: 24px; text-align: center; max-width: 350px; z-index: 2000001; top: 50%; left: 50%; transform: translate(-50%, -50%); }
 
-/* Mobile View Adjustments */
+/* =========================================================
+   PERFECT MOBILE VIEW FIXES (NATIVE ZOOM FIX FOR GLITCHES)
+   ========================================================= */
 @media (max-width: 900px) {
-  /* 1. Sidebar ko gayab hone se roka aur Bottom Navigation bana diya */
+  /* Sidebar Hamburger Menu with Smooth Slide */
+  #mobileMenuBtn, #closeMenuBtn { display: block !important; }
   .sidebar { 
     display: flex !important; 
+    flex-direction: column !important;
     position: fixed; 
-    bottom: 0; 
-    left: 0; 
-    width: 100%; 
-    height: auto; 
-    padding: 8px 12px !important; 
-    border-right: none; 
-    border-top: 1px solid var(--border); 
-    z-index: 1000; 
-    background: rgba(11, 15, 25, 0.95);
-    backdrop-filter: blur(10px);
-    flex-direction: row;
+    top: 0; 
+    left: -320px; 
+    bottom: auto;
+    width: 280px; 
+    height: 100vh; 
+    padding: 24px 16px !important; 
+    border-right: 1px solid var(--border); 
+    z-index: 100000; 
+    background: #0b0f19;
+    box-shadow: 10px 0 30px rgba(0,0,0,0.8);
+    transition: left 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .sidebar > div:first-child { width: 100%; }
-  .sidebar-brand, .promo-box { display: none !important; }
+  .sidebar.open { left: 0; }
+  .sidebar-brand, .promo-box { display: block !important; }
+  .nav-menu { flex-direction: column !important; overflow-x: visible; gap: 6px; }
+  .nav-item { white-space: normal; width: 100% !important; }
   
-  /* Menu items ko horizontal scrollable bana diya (Swipe left-right) */
-  .nav-menu { 
-    flex-direction: row !important; 
-    overflow-x: auto; 
-    gap: 10px; 
-    padding-bottom: 4px;
-  }
-  .nav-menu::-webkit-scrollbar { height: 0px; } /* Clean look ke liye scrollbar hidden */
-  .nav-item { 
-    white-space: nowrap; 
-    width: auto !important; 
-    padding: 10px 16px !important; 
-    font-size: 13px !important; 
-    flex-shrink: 0;
-  }
-
-  /* 2. Main content ko thik se set kiya taaki bottom nav ke piche na chhupe */
-  .main-content { 
-    margin-left: 0 !important; 
-    padding: 16px 16px 90px 16px !important; 
-    width: 100% !important; 
-    max-width: 100% !important; 
-  }
-  .app-wrapper { grid-template-columns: 1fr !important; }
+  .main-content { margin-left: 0 !important; padding: 16px !important; width: 100% !important; max-width: 100vw !important; }
   
-  /* 3. Header Bar Congestion Fix */
-  .header-bar { flex-direction: column; align-items: stretch; gap: 14px; padding: 16px !important; }
+  /* Header Fix */
+  .header-bar { flex-direction: column; align-items: flex-start; gap: 14px; padding: 16px !important; }
   .search-box { width: 100% !important; }
-  .header-right { justify-content: space-between; flex-wrap: wrap; width: 100%; gap: 10px; }
+  .header-right { justify-content: space-between; width: 100%; gap: 10px; flex-wrap: wrap; }
   
-  /* 4. Form Fields & Buttons Congestion Fix (Sab ek ke niche ek) */
+  /* Vertical Stack for Form, Bill, and Ledger */
+  .app-wrapper { 
+    display: flex !important; 
+    flex-direction: column !important; 
+    gap: 20px !important; 
+    width: 100% !important;
+  }
+  
+  .card-vibrant {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  /* Form inputs formatting */
   .input-grid, .input-grid-3 { grid-template-columns: 1fr !important; gap: 12px; }
-  .btn-group-actions { grid-template-columns: 1fr !important; gap: 10px; }
+  
+  /* Touch Buttons */
+  .btn-group-actions { display: flex !important; flex-direction: column !important; gap: 12px; }
+  .btn-save, .btn-print { width: 100%; padding: 16px; font-size: 15px; }
+  
+  /* ----------------------------------------------------
+     AUTO-FIT BILL & LEDGER FIX FOR MOBILE
+     ---------------------------------------------------- */
+  .preview-container, .statement-sheet-wrapper { 
+    overflow-x: auto !important; 
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 16px; 
+    margin-top: 10px;
+    background: #fffdfd;
+  }
+  
+  .rs-pad, .statement-sheet {
+    zoom: 0.42; /* Scale adjusted to prevent any cut off */
+    -moz-transform: scale(0.42);
+    -moz-transform-origin: top left;
+    transform-origin: top left; /* <-- VS Code ki shanti ke liye ye line add ki hai */
+    width: 740px !important;
+    min-width: 740px !important;
+    transform: none !important;
+    margin-bottom: 0 !important;
+  }
+  
+  .statement-sheet { padding: 30px !important; box-shadow: none !important; margin-top: 0 !important; }
+  .statement-sheet table { min-width: 650px; }
+  .shop-banner { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .banner-right { text-align: left; }
 
-  /* Bill Preview - Scrollable on mobile to save print layout */
-  .preview-container { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 16px; margin-top: 20px;}
+  #mobileViewBillBtn { display: block !important; }
+}
+
+/* =========================================================
+   BULLETPROOF PRINT FIX (PREVENTS OVERLAPPING FOREVER)
+   ========================================================= */
+@media print {
+  body { background: white !important; color: black !important; padding: 0 !important; margin: 0 !important; }
+  .sidebar, .header-bar, .card-vibrant, .no-print, #pinLockScreen, #mobileViewBillBtn, #appToast { display: none !important; }
+  .main-content { margin: 0 !important; padding: 0 !important; width: 100% !important; max-width: 100% !important; }
+  
+  /* Overlapping aur scaling puri tarah se khatam */
+  .preview-container, .statement-sheet-wrapper { 
+    border: none !important; 
+    box-shadow: none !important; 
+    overflow: visible !important; 
+    width: 100% !important; 
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+  .rs-pad, .statement-sheet { 
+    zoom: 1 !important; /* Mobile shrink ko 100% par laya */
+    transform: none !important; 
+    width: 100% !important; 
+    min-width: 0 !important; 
+    padding: 0 !important; 
+    margin: 0 !important; 
+    overflow: visible !important;
+  }
+
+  /* Table ko 'fixed' kiya taaki columns overlap na karein */
+  .rs-table { 
+    width: 100% !important; 
+    table-layout: fixed !important; 
+  }
+  
+  .rs-table th, .rs-table td {
+    white-space: pre-wrap !important; 
+    word-wrap: break-word !important;
+    font-size: 11px !important;
+    padding: 5px !important;
+  }
+
+  .shop-banner { -webkit-print-color-adjust: exact; print-color-adjust: exact; page-break-inside: avoid; }
+  @page { size: auto; margin: 5mm; }
 }

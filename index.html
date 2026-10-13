@@ -79,8 +79,9 @@
     </div>
   </div>
 
-  <!-- Left Sidebar -->
-  <div class="sidebar no-print">
+  <!-- Left Sidebar (With Mobile Fix) -->
+  <div class="sidebar no-print" id="mobileSidebar">
+    <button id="closeMenuBtn" onclick="toggleMobileMenu()" style="display:none; background:transparent; border:none; color:white; font-size:20px; cursor:pointer; position:absolute; right:16px; top:16px;">✕</button>
     <div>
       <div class="sidebar-brand">
         <div style="background: var(--primary-gradient); width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 900; color: white;">RS</div>
@@ -105,9 +106,12 @@
   <!-- Main Content -->
   <div class="main-content">
     <div class="header-bar no-print">
-      <div class="search-box">
-        <span>🔍</span>
-        <input type="text" id="globalSearchInput" placeholder="Search customer or bill..." oninput="handleGlobalSearch(this)" />
+      <div style="display:flex; align-items:center; gap:10px; width:100%;">
+        <button id="mobileMenuBtn" onclick="toggleMobileMenu()" class="no-print" style="display:none; background:transparent; border:none; color:white; font-size:26px; cursor:pointer;">☰</button>
+        <div class="search-box" style="flex:1;">
+          <span>🔍</span>
+          <input type="text" id="globalSearchInput" placeholder="Search customer or bill..." oninput="handleGlobalSearch(this)" />
+        </div>
       </div>
       <div class="header-right">
         <input type="file" id="restoreFileInput" accept=".json" style="display:none;" onchange="handleFileRestore(event)" />
@@ -123,6 +127,9 @@
     <!-- 1. BILLING TAB -->
     <div id="tab-billing" class="tab-content active">
       
+      <!-- Mobile View Bill Floating Button -->
+      <button id="mobileViewBillBtn" class="no-print" onclick="document.querySelector('.preview-container').scrollIntoView({behavior: 'smooth'})" style="display:none; position:fixed; bottom:24px; right:24px; background:#10b981; color:white; border:none; padding:14px 20px; border-radius:30px; font-size:14px; font-weight:800; box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4); z-index:900;">👁️ View Bill</button>
+
       <div id="draftBanner" style="display:none; background:#1e1b4b; border:1px solid #6366f1; padding:12px 18px; border-radius:12px; margin-bottom:16px; justify-content:space-between; align-items:center;">
         <div>
           <div style="font-size:13px; color:white; font-weight:700;">Aapka ek adha-adhura bill (Draft) bacha hai!</div>
@@ -145,7 +152,7 @@
 
           <div class="section-box">
             <div class="section-box-title">👤 Customer Details</div>
-            <div class="input-grid-3" style="grid-template-columns: 1.2fr 1fr;">
+            <div class="input-grid-3">
               <div>
                 <span style="font-size: 10px; color: var(--text-dim);">Customer Name *</span>
                 <input type="text" id="inCustName" class="input-box" placeholder="Customer Name" oninput="updateLiveMeta()" />
@@ -189,7 +196,7 @@
                 <select id="inItemNameSelect" class="input-box"></select>
               </div>
               <div>
-                <span style="font-size: 10px; color: #38bdf8; font-weight:700;">Particulars / Description (Editable e.g. VINEGAR - 1L):</span>
+                <span style="font-size: 10px; color: #38bdf8; font-weight:700;">Particulars / Description (Editable):</span>
                 <input type="text" id="inItemName" class="input-box" style="margin-top:4px;" placeholder="Product description for bill..." />
               </div>
               <div class="input-grid">
@@ -443,49 +450,54 @@
         </div>
       </div>
 
-      <div class="statement-sheet">
-        <div class="shop-banner">
-          <div class="banner-left">
-            <div class="banner-brand-title">R.S. HOME PRODUCT</div>
-            <div class="banner-sub">Quality Sauces & Vinegar</div>
-            <div style="font-size: 11px; color: #cbd5e1; margin-top: 2px;">Katras More, Kendua Road Jharia - 828111</div>
+      <!-- FIX: Wrapper for ledger statement so it scales but prints fine -->
+      <div class="statement-sheet-wrapper">
+        <div class="statement-sheet">
+          <div class="shop-banner">
+            <div class="banner-left">
+              <div class="banner-brand-title">R.S. HOME PRODUCT</div>
+              <div class="banner-sub">Quality Sauces & Vinegar</div>
+              <div style="font-size: 11px; color: #cbd5e1; margin-top: 2px;">Katras More, Kendua Road Jharia - 828111</div>
+            </div>
+            <div class="banner-right">
+              <div class="banner-phone">📞 8340596102</div>
+              <div>GSTIN: 20GK1PS1473KIZW</div>
+              <div>Regd. No.: 21119172000094</div>
+            </div>
           </div>
-          <div class="banner-right">
-            <div class="banner-phone">📞 8340596102</div>
-            <div>GSTIN: 20GK1PS1473KIZW</div>
-            <div>Regd. No.: 21119172000094</div>
+
+          <div style="text-align: center; margin: 14px 0 20px 0;">
+            <h3 style="font-size: 16px; font-weight: 800; text-decoration: underline; letter-spacing: 0.5px; color:#0f172a;">CUSTOMER LEDGER STATEMENT</h3>
           </div>
-        </div>
 
-        <div style="text-align: center; margin: 14px 0 20px 0;">
-          <h3 style="font-size: 16px; font-weight: 800; text-decoration: underline; letter-spacing: 0.5px; color:#0f172a;">CUSTOMER LEDGER STATEMENT</h3>
-        </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 16px; font-size: 13px;">
+            <div><strong>Customer Name:</strong> <span id="stLedgerName" style="color:#4f46e5; font-weight:700; font-size: 16px;">--</span></div>
+            <div><strong>Statement Date:</strong> <span id="stGeneratedDate">--</span></div>
+          </div>
 
-        <div style="display: flex; justify-content: space-between; margin-bottom: 16px; font-size: 13px;">
-          <div><strong>Customer Name:</strong> <span id="stLedgerName" style="color:#4f46e5; font-weight:700; font-size: 16px;">--</span></div>
-          <div><strong>Statement Date:</strong> <span id="stGeneratedDate">--</span></div>
-        </div>
+          <div style="overflow-x: auto;">
+            <table class="rs-table">
+              <thead>
+                <tr>
+                  <th style="width: 12%;">DATE</th>
+                  <th style="width: 38%;">PARTICULARS</th>
+                  <th style="width: 12%;">VCH TYPE</th>
+                  <th style="width: 8%;">VCH NO.</th>
+                  <th style="width: 10%; text-align: right;">DEBIT (DR)</th>
+                  <th style="width: 10%; text-align: right;">CREDIT (CR)</th>
+                  <th style="width: 10%; text-align: right;">BALANCE DUE</th>
+                  <th class="no-print" style="width: 85px; text-align: center;">ACTION</th>
+                </tr>
+              </thead>
+              <tbody id="statementBody"></tbody>
+            </table>
+          </div>
 
-        <table class="rs-table">
-          <thead>
-            <tr>
-              <th style="width: 105px;">DATE</th>
-              <th>PARTICULARS</th>
-              <th style="width: 100px;">VCH TYPE</th>
-              <th style="width: 100px;">VCH NO.</th>
-              <th style="width: 110px; text-align: right;">DEBIT (DR)</th>
-              <th style="width: 110px; text-align: right;">CREDIT (CR)</th>
-              <th style="width: 120px; text-align: right;">BALANCE DUE</th>
-              <th class="no-print" style="width: 85px; text-align: center;">ACTION</th>
-            </tr>
-          </thead>
-          <tbody id="statementBody"></tbody>
-        </table>
-
-        <div style="margin-top: 40px; display: flex; justify-content: space-between; align-items: flex-end;">
-          <div style="font-size: 11px; color: #64748b;">This is a computer generated ledger statement.</div>
-          <div style="text-align: right; border-top: 1px solid #333; width: 220px; padding-top: 6px; font-size: 12px; font-weight: 700; color:#1e293b;">
-            Authorised Signature
+          <div style="margin-top: 40px; display: flex; justify-content: space-between; align-items: flex-end;">
+            <div style="font-size: 11px; color: #64748b;">This is a computer generated ledger statement.</div>
+            <div style="text-align: right; border-top: 1px solid #333; width: 220px; padding-top: 6px; font-size: 12px; font-weight: 700; color:#1e293b;">
+              Authorised Signature
+            </div>
           </div>
         </div>
       </div>
